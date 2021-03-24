@@ -49,6 +49,8 @@ char	*concat(char *temp_line, char *addstr)
 
 	i = 0;
 	cc_str = malloc(ft_strlen(temp_line) + ft_strlen(addstr) + 1);
+	if (!cc_str)
+		return (NULL);
 	while (temp_line[i] != '\0')
 	{
 		cc_str[i] = temp_line[i];

@@ -45,6 +45,8 @@ int	continue_reading(int fd, char **line, char **temp_line, char *buff)
 	int	chars_read;
 
 	*temp_line = concat(*temp_line, buff);
+	if (!*temp_line)
+		return (0);
 	chars_read = read(fd, buff, BUFFER_SIZE);
 	if (chars_read < BUFFER_SIZE)
 	{
@@ -61,7 +63,7 @@ int	continue_reading(int fd, char **line, char **temp_line, char *buff)
 
 int	read_and_terminate(int fd, char *buff)
 {
-	int			chars_read;
+	int	chars_read;
 
 	chars_read = read(fd, buff, BUFFER_SIZE);
 	if (chars_read < 0)
@@ -87,11 +89,16 @@ int	get_next_line(int fd, char **line)
 	if (!buff)
 		return (-1);
 	temp_line = ft_strdup(rest);
+	if (!temp_line)
+		return (-1);
 	if (read_and_terminate(fd, buff) == -1)
 		return (-1);
 	while (!find_newline(buff))
 		if (!continue_reading(fd, line, &temp_line, buff))
+		{
+			rest[0] = '\0';
 			return (0);
+		}
 	*line = concat(temp_line, buff);
 	go_back(buff, rest);
 	free(buff);
